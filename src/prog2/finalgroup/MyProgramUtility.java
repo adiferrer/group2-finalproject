@@ -62,9 +62,11 @@ public class MyProgramUtility {
     }
 
     /**
-     * This method sorts a stream according to district
+     * This method sorts a stream of citizens according to district. <br>
+     * Done by: Jeanne Ferrer
      *
-     * @param CitizenList stream of citizen list
+     * @param CitizenList a stream generated from a Citizen ArrayList
+     * @return an ArrayList of Citizens that is sorted according to district
      */
     protected static ArrayList<Citizen> sortAccordingToDistrictGlobal(Stream<Citizen> CitizenList) {
         //.forEach(System.out::println);
@@ -141,10 +143,17 @@ public class MyProgramUtility {
     }
 
     // SHOW OPERATIONS (PER DISTRICT)
-    /** 1. TODO Adi - Generate a stream from a Citizen ArrayList then use Stream.filter, then display outputs directly */
+    /**
+     * This method filters citizens that belong to a specified district
+     * and at the same time, are identified as residents. <br>
+     * Done by: Jeanne Ferrer
+     *
+     * @param CitizenList a stream generated from a Citizen ArrayList
+     * @param district the user indicated district number
+     * @return an ArrayList of Citizens
+     */
     protected static ArrayList<Citizen> showResidentsPerDistrict(Stream<Citizen> CitizenList, int district) {
         //forEach(System.out::println);
-
         return CitizenList
                 .filter(c -> c.getDistrict() == district && c.isResident())
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -160,10 +169,17 @@ public class MyProgramUtility {
         return CitizenList.collect(Collectors.toCollection(ArrayList::new));
     }
 
-    /** 4. TODO Adi - Generate a stream from a Citizen ArrayList then use Stream.filter, then display outputs directly */
+    /**
+     * This method filters citizens that belong to a specified district,
+     * and at the same time, are identified as females. <br>
+     * Done by: Jeanne Ferrer
+     *
+     * @param district a stream generated from a Citizen ArrayList
+     * @param CitizenList the user indicated district number
+     * @return an ArrayList of Citizens
+     */
     protected static ArrayList<Citizen> showFemalesPerDistrict(Stream<Citizen> CitizenList, int district) {
         //.forEach(System.out::println);
-
         return CitizenList
                 .filter(c -> c.getGender() == 'F' && c.getDistrict() == district)
                 .collect(Collectors.toCollection(ArrayList::new));

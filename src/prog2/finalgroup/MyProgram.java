@@ -21,6 +21,7 @@ public class MyProgram extends JFrame {
      */
 
     private ArrayList<Citizen> list = MyProgramUtility.parseCSV("res/data.csv");
+    private ArrayList<Citizen> citizenArrayList;
 
     private JPanel buttonPaneGlobal;
     private JPanel buttonPaneGlobalSortOperations;
@@ -43,7 +44,7 @@ public class MyProgram extends JFrame {
         buttonPaneDistrictSortOperations = new JPanel();
         buttonPaneDistrictShowOperations = new JPanel();
         globalOrDistrictSelector = new JTabbedPane();
-        citizenPane = new JPanel();
+        citizenPane = new JPanel(new BorderLayout());
         scrollPane = new JScrollPane();
         citizenTable = new JTable();
         String[] column = {"Full Name", "E-mail", "Address", "Age", "Resident", "District", "Gender"};
@@ -53,9 +54,43 @@ public class MyProgram extends JFrame {
         sortAccordingToAgeGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // removes previous scroll pane
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
-                // code utilizing JTable here
+
+                citizenArrayList = MyProgramUtility.sortAccordingToAgeGlobal(list.stream());
+
+                // code utilizing JTable
+                DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+                for (Citizen c : citizenArrayList) {
+                    Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                            c.getAge(), resOrNonRes(c.isResident()),
+                            c.getDistrict(), maleOrFemale(c.getGender())};
+                    tableModel.addRow(data);
+                }
+
+                // Auto-resizing to cell content source code:
+                // https://stackoverflow.com/questions/17858132/automatically-adjust-jtable-column-to-fit-content/25570812
+                citizenTable = new JTable(tableModel) {
+                    @Override
+                    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                        Component component = super.prepareRenderer(renderer, row, column);
+                        int rendererWidth = component.getPreferredSize().width;
+                        TableColumn tableColumn = getColumnModel().getColumn(column);
+                        tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                // added 10 spaces so that the columns won't be too congested
+                                getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                        return component;
+                    }
+                };
+                citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                scrollPane = new JScrollPane(citizenTable);
+                citizenPane.add(scrollPane);
+                setMaximumSize(new Dimension(1400, 1000));
+                setMinimumSize(new Dimension(1100, 550));
+                pack();
+                setLocationRelativeTo(null);
             }
         });
         buttonPaneGlobalSortOperations.add(sortAccordingToAgeGloballyButton);
@@ -66,7 +101,36 @@ public class MyProgram extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
-                // code utilizing JTable here
+                citizenArrayList = MyProgramUtility.sortAccordingToLastNameGlobal(list.stream());
+
+                // code utilizing JTable
+                DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+                for (Citizen c : citizenArrayList) {
+                    Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                            c.getAge(), resOrNonRes(c.isResident()),
+                            c.getDistrict(), maleOrFemale(c.getGender())};
+                    tableModel.addRow(data);
+                }
+
+                citizenTable = new JTable(tableModel) {
+                    @Override
+                    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                        Component component = super.prepareRenderer(renderer, row, column);
+                        int rendererWidth = component.getPreferredSize().width;
+                        TableColumn tableColumn = getColumnModel().getColumn(column);
+                        tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                        return component;
+                    }
+                };
+                citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                scrollPane = new JScrollPane(citizenTable);
+                citizenPane.add(scrollPane);
+                setMaximumSize(new Dimension(1400, 1000));
+                setMinimumSize(new Dimension(1100, 550));
+                pack();
+                setLocationRelativeTo(null);
             }
         });
         buttonPaneGlobalSortOperations.add(sortAccordingToNameGloballyButton);
@@ -77,7 +141,36 @@ public class MyProgram extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
-                // code utilizing JTable here
+                citizenArrayList = MyProgramUtility.sortAccordingToGenderGlobal(list.stream());
+
+                // code utilizing JTable
+                DefaultTableModel tableModel = new DefaultTableModel(column, 0);
+                for (Citizen c : citizenArrayList) {
+                    Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                            c.getAge(), resOrNonRes(c.isResident()),
+                            c.getDistrict(), maleOrFemale(c.getGender())};
+                    tableModel.addRow(data);
+                }
+
+                citizenTable = new JTable(tableModel) {
+                    @Override
+                    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                        Component component = super.prepareRenderer(renderer, row, column);
+                        int rendererWidth = component.getPreferredSize().width;
+                        TableColumn tableColumn = getColumnModel().getColumn(column);
+                        tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                        return component;
+                    }
+                };
+                citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                scrollPane = new JScrollPane(citizenTable);
+                citizenPane.add(scrollPane);
+                setMaximumSize(new Dimension(1400, 1000));
+                setMinimumSize(new Dimension(1100, 550));
+                pack();
+                setLocationRelativeTo(null);
             }
         });
         buttonPaneGlobalSortOperations.add(sortAccordingToGenderGloballyButton);
@@ -86,31 +179,28 @@ public class MyProgram extends JFrame {
         sortAccordingToDistrictGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<Citizen> citizenArrayList = MyProgramUtility.sortAccordingToDistrictGlobal(list.stream());
-                // code utilizing JTable here
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
+                citizenArrayList = MyProgramUtility.sortAccordingToDistrictGlobal(list.stream());
+
+                // code utilizing JTable
                 DefaultTableModel tableModel = new DefaultTableModel(column, 0);
                 for (Citizen c : citizenArrayList) {
-                    String r = "", g = "";
-                    if (c.isResident()) r = "Resident";
-                    else r = "Non-Resident";
-                    if (c.getGender() == 'F') g = "Female";
-                    else g = "Male";
                     Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
-                            c.getAge(), r, c.getDistrict(), g};
+                            c.getAge(), resOrNonRes(c.isResident()),
+                            c.getDistrict(), maleOrFemale(c.getGender())};
                     tableModel.addRow(data);
                 }
 
-                // Auto-resizing to cell content source code
-                // https://stackoverflow.com/questions/17858132/automatically-adjust-jtable-column-to-fit-content/25570812
                 citizenTable = new JTable(tableModel) {
+                    @Override
                     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
                         Component component = super.prepareRenderer(renderer, row, column);
                         int rendererWidth = component.getPreferredSize().width;
                         TableColumn tableColumn = getColumnModel().getColumn(column);
                         tableColumn.setPreferredWidth(Math.max(rendererWidth +
-                                getIntercellSpacing().width, tableColumn.getPreferredWidth()));
+                                // added 10 spaces so that the columns won't be too congested
+                                getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
                         return component;
                     }
                 };
@@ -118,7 +208,10 @@ public class MyProgram extends JFrame {
 
                 scrollPane = new JScrollPane(citizenTable);
                 citizenPane.add(scrollPane);
+                setMaximumSize(new Dimension(1400, 1000));
+                setMinimumSize(new Dimension(1100, 550));
                 pack();
+                setLocationRelativeTo(null);
             }
         });
         buttonPaneGlobalSortOperations.add(sortAccordingToDistrictGloballyButton);
@@ -129,7 +222,12 @@ public class MyProgram extends JFrame {
         showResidentsGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
+                citizenArrayList = MyProgramUtility.showResidentsGlobal(list.stream());
+
                 // code utilizing JTable here
+
             }
         });
         buttonPaneGlobalShowOperations.add(showResidentsGloballyButton);
@@ -138,7 +236,12 @@ public class MyProgram extends JFrame {
         showNonResidentsGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
+                citizenArrayList = MyProgramUtility.showNonResidentsGlobal(list.stream());
+
                 // code utilizing JTable here
+
             }
         });
         buttonPaneGlobalShowOperations.add(showNonResidentsGloballyButton);
@@ -147,7 +250,10 @@ public class MyProgram extends JFrame {
         showMalesGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.showMalesGlobal(list.stream());
                 // code utilizing JTable here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneGlobalShowOperations.add(showMalesGloballyButton);
@@ -156,7 +262,10 @@ public class MyProgram extends JFrame {
         showFemalesGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.showFemalesGlobal(list.stream());
                 // code utilizing JTable here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneGlobalShowOperations.add(showFemalesGloballyButton);
@@ -165,8 +274,11 @@ public class MyProgram extends JFrame {
         showAgesWithinAGivenRangeGlobally.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.showAgesWithinRangeGlobal(list.stream());
                 // utilize a popup window for accepting user input
                 // code utilizing JTable here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneGlobalShowOperations.add(showAgesWithinAGivenRangeGlobally);
@@ -182,7 +294,10 @@ public class MyProgram extends JFrame {
         sortAccordingToAgePerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.sortAccordingToAgePerDistrict(list.stream(),  1);
                 // Code here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneDistrictSortOperations.add(sortAccordingToAgePerDistrictBtn);
@@ -191,7 +306,10 @@ public class MyProgram extends JFrame {
         sortAccordingToNamePerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.sortAccordingToLastNamePerDistrict(list.stream(), 1);
                 // code here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneDistrictSortOperations.add(sortAccordingToNamePerDistrictBtn);
@@ -200,7 +318,10 @@ public class MyProgram extends JFrame {
         sortAccordingToGenderPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.sortAccordingToGenderPerDistrict(list.stream(), 1);
                 // code here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneDistrictSortOperations.add(sortAccordingToGenderPerDistrictBtn);
@@ -211,7 +332,10 @@ public class MyProgram extends JFrame {
         showResidentsPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.showResidentsPerDistrict(list.stream(), 1);
                 // code here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneDistrictShowOperations.add(showResidentsPerDistrictBtn);
@@ -220,7 +344,10 @@ public class MyProgram extends JFrame {
         showNonResidentsPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.showNonResidentsPerDistrict(list.stream(), 1);
                 // code here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneDistrictShowOperations.add(showNonResidentsPerDistrictBtn);
@@ -229,7 +356,10 @@ public class MyProgram extends JFrame {
         showMalesPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.showMalesPerDistrict(list.stream(), 1);
                 // code here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneDistrictShowOperations.add(showMalesPerDistrictBtn);
@@ -238,7 +368,10 @@ public class MyProgram extends JFrame {
         showFemalesPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.showFemalesPerDistrict(list.stream(), 1);
                 // code here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneDistrictShowOperations.add(showFemalesPerDistrictBtn);
@@ -247,7 +380,10 @@ public class MyProgram extends JFrame {
         showAgesPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                citizenArrayList = MyProgramUtility.showAgesWithinRangePerDistrict(list.stream(), 1);
                 // code here
+                if (scrollPane.isVisible())
+                    scrollPane.setVisible(false);
             }
         });
         buttonPaneDistrictShowOperations.add(showAgesPerDistrictBtn);
@@ -282,10 +418,20 @@ public class MyProgram extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
         setVisible(true);
+        setLocationRelativeTo(null);
     }
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> new MyProgram());
     }
 
+    protected static String resOrNonRes(boolean r) {
+        if (r) return "Resident";
+        return "Non-Resident";
+    }
+
+    protected static String maleOrFemale(char g) {
+        if (g == 'F') return "Female";
+        return "Male";
+    }
 }
