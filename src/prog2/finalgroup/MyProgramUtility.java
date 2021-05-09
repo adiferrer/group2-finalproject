@@ -78,7 +78,10 @@ public class MyProgramUtility {
     // SORT OPERATIONS (PER DISTRICT)
     /** 1. TODO EJ - use maps */
     protected static ArrayList<Citizen> sortAccordingToAgePerDistrict(Stream<Citizen> CitizenList, int district) {
-        return CitizenList.collect(Collectors.toCollection(ArrayList::new));
+        return CitizenList
+                .filter(c -> c.getDistrict() == district)
+                .sorted((c1,c2) -> c1.getAge() - c2.getAge())
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /** 2. TODO Jerome - use maps */
@@ -108,7 +111,7 @@ public class MyProgramUtility {
     /** 1. TODO Enrico - iterate manually through loops */
     protected static ArrayList<Citizen> showResidentsGlobal(Stream<Citizen> CitizenList) {
         return CitizenList
-        .filter(c -> c.isResident() == true)
+                .filter(c -> c.isResident() == true)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -138,8 +141,11 @@ public class MyProgramUtility {
     }
 
     /** 5. TODO EJ - iterate manually through loops */
-    protected static ArrayList<Citizen> showAgesWithinRangeGlobal(Stream<Citizen> CitizenList) {
-        return CitizenList.collect(Collectors.toCollection(ArrayList::new));
+    protected static ArrayList<Citizen> showAgesWithinRangeGlobal(Stream<Citizen> CitizenList, int min, int max) {
+        return CitizenList
+                .filter(c -> c.getAge() >= min && c.getAge() <= max)
+                //.sorted(Comparator.reverseOrder())
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     // SHOW OPERATIONS (PER DISTRICT)
@@ -166,7 +172,9 @@ public class MyProgramUtility {
 
     /** 3. TODO EJ - Generate a stream from a Citizen ArrayList then use Stream.filter, then display outputs directly */
     protected static ArrayList<Citizen> showMalesPerDistrict(Stream<Citizen> CitizenList, int district) {
-        return CitizenList.collect(Collectors.toCollection(ArrayList::new));
+        return CitizenList
+                .filter(c -> c.getGender() == 'M' && c.getDistrict() == district)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -209,8 +217,7 @@ public class MyProgramUtility {
     }
 
     /** 2. TODO Enrico - Use streams */
-    protected static ArrayList<Citizen> countMales(Stream<Citizen> CitizenList) {
-        return CitizenList.collect(Collectors.toCollection(ArrayList::new));
+    protected static long countMales(Stream<Citizen> CitizenList) {
        return CitizenList
                 .filter(p -> p.getGender() == 'M')
                 .count();
