@@ -12,6 +12,8 @@ public class MyProgramUtility {
     // Source for regex used:
     // https://stackoverflow.com/questions/1757065/java-splitting-a-comma-separated-string-but-ignoring-commas-in-quotes
     private static BufferedReader br;
+
+    /** TODO Kurt: comments */
     protected static ArrayList<Citizen> parseCSV(String fileName) {
         ArrayList<Citizen> citizenArrayList = new ArrayList<>();
         String line;
@@ -43,6 +45,7 @@ public class MyProgramUtility {
     }
 
     // SORT OPERATIONS (GLOBALLY)
+<<<<<<< HEAD
     /**
      * 3. By: Enrico Castro
      * This method sorts a stream of citizens according to their age. <br>
@@ -53,6 +56,9 @@ public class MyProgramUtility {
      * @param CitizenList stream implying the list of citizens
      * @return an arrayList sorted according to the citizen's ages
      */
+=======
+    /** TODO Enrico: comments  */
+>>>>>>> Added Pop-up window method for acquiring district input
     protected static ArrayList<Citizen> sortAccordingToAgeGlobal(Stream<Citizen> CitizenList) {
       return CitizenList
                 .sorted((r1, r2)
@@ -62,11 +68,6 @@ public class MyProgramUtility {
 
     /** 2. TODO Kurt  */
     protected static ArrayList<Citizen> sortAccordingToLastNameGlobal(Stream<Citizen> CitizenList) {
-        return CitizenList.collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    /** 3. TODO Andre  */
-    protected static ArrayList<Citizen> sortAccordingToGenderGlobal(Stream<Citizen> CitizenList) {
         return CitizenList.collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -85,7 +86,7 @@ public class MyProgramUtility {
     }
 
     // SORT OPERATIONS (PER DISTRICT)
-    /** 1. TODO EJ - use maps */
+    /** TODO EJ: comments */
     protected static ArrayList<Citizen> sortAccordingToAgePerDistrict(Stream<Citizen> CitizenList, int district) {
         return CitizenList
                 .filter(c -> c.getDistrict() == district)
@@ -93,16 +94,18 @@ public class MyProgramUtility {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    /** 2. TODO Jerome - use maps */
     /**
-     * This method sorts a stream according to full name in a specific district
+     * This method sorts a stream according to last name in a specific district. <br>
+     * Done by: Jerome Bustarde
      *
      * Method Algorithm:
      * 1. filter the stream to gather all the values in the specific district
      * 2. sort the values by its full name using comparator
      * 3. use collect to store the newly created stream into a new Collection
+     *
      * @param CitizenList stream of citizen list
      * @param district district inputted by the user
+     * @return an ArrayList of Citizens that is sorted according to last name in a specified district
      */
     protected static ArrayList<Citizen> sortAccordingToLastNamePerDistrict(Stream<Citizen> CitizenList, int district) {
         return CitizenList
@@ -117,6 +120,7 @@ public class MyProgramUtility {
     }
 
     // SHOW OPERATIONS (GLOBALLY)
+<<<<<<< HEAD
     /**
      * 1. By: Enrico Castro 
      * This method amasses the names of the residents present in the arrayList . <br>
@@ -127,6 +131,9 @@ public class MyProgramUtility {
      * @param CitizenList stream implying the list of citizens
      * @return an arrayList of citizens who are residents
      *//
+=======
+    /** TODO Enrico: comments */
+>>>>>>> Added Pop-up window method for acquiring district input
     protected static ArrayList<Citizen> showResidentsGlobal(Stream<Citizen> CitizenList) {
         return CitizenList
                 .filter(c -> c.isResident() == true)
@@ -143,22 +150,24 @@ public class MyProgramUtility {
         return CitizenList.collect(Collectors.toCollection(ArrayList::new));
     }
 
-    /** 4. TODO Jerome - iterate manually through loops */
      /**
-     * This method creates a collection of all the female citizen
-     *
-     * Method Algorithm
-     * 1. filter to stream to gather all the values of all the female citizen
-     * 2. use collect to store the newly created stream into a new Collection
-     * @param CitizenList stream of citizen list
-     */
+      * This method creates a collection of all the female citizens. <br>
+      * Done by: Jerome Bustarde
+      * <p>
+      * Method Algorithm: <br>
+      * 1. Filter to stream to gather all the values of all the female citizens <br>
+      * 2. Use collect to store the newly created stream into a new Collection
+      *
+      * @param CitizenList stream of citizen list
+      * @return
+      */
     protected static ArrayList<Citizen> showFemalesGlobal(Stream<Citizen> CitizenList) {
         return CitizenList
             .filter(f -> f.getGender() == 'F')
             .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    /** 5. TODO EJ - iterate manually through loops */
+    /** TODO EJ: comments  */
     protected static ArrayList<Citizen> showAgesWithinRangeGlobal(Stream<Citizen> CitizenList, int min, int max) {
         return CitizenList
                 .filter(c -> c.getAge() >= min && c.getAge() <= max)
@@ -217,18 +226,18 @@ public class MyProgramUtility {
     }
 
     // COUNT OPERATIONS (GLOBALLY)
-    /** 1. TODO Jerome - Use streams; Iterate manually through loops or use a comparator */
      /**
-     * this method counts the people within a range
-     *
-     * Method Algorithm
-     * 1. filter the stream to gather all the values within the range
-     * 2. count the elements in the stream
-     * @param CitizenList stream of citizen list
-     * @param min minimum range
-     * @param max maximum range
-     */
-    protected static long countPeopleWithinRange(Stream<Citizen> CitizenList) {
+      * This method counts the people within a range. <br>
+      * Done by: Jerome Bustarde
+      *
+      * Method Algorithm
+      * 1. filter the stream to gather all the values within the range
+      * 2. count the elements in the stream
+      * @param CitizenList stream of citizen list
+      * @param min minimum range
+      * @param max maximum range
+      */
+    protected static long countPeopleWithinRange(Stream<Citizen> CitizenList, int min, int max) {
         return CitizenList
             .filter(c -> c.getDistrict() >= min && c.getDistrict() <= max)
             .count();

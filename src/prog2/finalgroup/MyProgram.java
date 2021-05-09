@@ -106,7 +106,7 @@ public class MyProgram extends JFrame {
         sortAccordingToNameGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setTitle("My Program: Citizens Sorted According to Last Name (A-Z)");
+                setTitle("My Program: Citizens Sorted According to Name (A-Z)");
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
                 citizenArrayList = MyProgramUtility.sortAccordingToLastNameGlobal(list.stream());
@@ -143,47 +143,6 @@ public class MyProgram extends JFrame {
             }
         });
         buttonPaneGlobalSortOperations.add(sortAccordingToNameGloballyButton);
-
-        var sortAccordingToGenderGloballyButton = new JButton("Gender"); // DONE
-        sortAccordingToGenderGloballyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setTitle("My Program: Citizens Sorted According to Gender (Females then Males)");
-                if (scrollPane.isVisible())
-                    scrollPane.setVisible(false);
-                citizenArrayList = MyProgramUtility.sortAccordingToGenderGlobal(list.stream());
-
-                // code utilizing JTable
-                DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
-                for (Citizen c : citizenArrayList) {
-                    Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
-                            c.getAge(), resOrNonRes(c.isResident()),
-                            c.getDistrict(), maleOrFemale(c.getGender())};
-                    tableModel.addRow(data);
-                }
-
-                citizenTable = new JTable(tableModel) {
-                    @Override
-                    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-                        Component component = super.prepareRenderer(renderer, row, column);
-                        int rendererWidth = component.getPreferredSize().width;
-                        TableColumn tableColumn = getColumnModel().getColumn(column);
-                        tableColumn.setPreferredWidth(Math.max(rendererWidth +
-                                getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
-                        return component;
-                    }
-                };
-                citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-                scrollPane = new JScrollPane(citizenTable);
-                citizenPane.add(scrollPane);
-                setMaximumSize(new Dimension(1400, 1000));
-                setMinimumSize(new Dimension(1100, 550));
-                pack();
-                setLocationRelativeTo(null);
-            }
-        });
-        buttonPaneGlobalSortOperations.add(sortAccordingToGenderGloballyButton);
 
         var sortAccordingToDistrictGloballyButton = new JButton("District"); // DONE
         sortAccordingToDistrictGloballyButton.addActionListener(new ActionListener() {
@@ -413,44 +372,53 @@ public class MyProgram extends JFrame {
                     }
 
                     else if (age1.equalsIgnoreCase(""))
-                        JOptionPane.showMessageDialog(null, "Please enter some text.");
+                        JOptionPane.showMessageDialog(null, "Please enter some data.",
+                                "Blank Text Field", JOptionPane.ERROR_MESSAGE);
                     else {
                         try {
                             minAge = Integer.parseInt(age1);
                             if (minAge < 18 || minAge > 70)
                                 JOptionPane.showMessageDialog(null,
-                                        "Please enter a value between 18 and 70.");
+                                        "Please enter a value between 18 and 70.", "Invalid Age",
+                                        JOptionPane.ERROR_MESSAGE);
                             else if (minAge == 70) {
                                 JOptionPane.showMessageDialog(null,
-                                        "Maximum age entered. Click OK to proceed.");
+                                        "Maximum age entered. Click OK to proceed.", "Message",
+                                        JOptionPane.INFORMATION_MESSAGE);
                                 maxAge = 70;
                                 break;
                             }
                         } catch (NumberFormatException numberFormatException) {
-                            JOptionPane.showMessageDialog(null, "Please enter a valid number.");
+                            JOptionPane.showMessageDialog(null, "Please enter a valid number.",
+                                    "Invalid Input", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 } while (minAge < 18 || minAge > 70 || age1.equalsIgnoreCase(""));
 
                 if (age1 != null && minAge != 70) {
                     do {
-                        age2 = JOptionPane.showInputDialog(null, "Please enter the maximum age: ",
-                                "Input Max. Age", JOptionPane.INFORMATION_MESSAGE);
+                        age2 = JOptionPane.showInputDialog(null,
+                                "Please enter the maximum age: ", "Input Max. Age",
+                                JOptionPane.INFORMATION_MESSAGE);
                         if (age2 == null) {
                             minAge = 0;
                             setTitle("My Program");
                             break;
                         }
                         else if (age2.equalsIgnoreCase(""))
-                            JOptionPane.showMessageDialog(null, "Please enter some text.");
+                            JOptionPane.showMessageDialog(null, "Please provide some data.",
+                                    "Blank Text Field", JOptionPane.ERROR_MESSAGE);
                         else {
                             try {
                                 maxAge = Integer.parseInt(age2);
                                 if (maxAge < minAge || maxAge > 70)
                                     JOptionPane.showMessageDialog(null,
-                                            "Please enter a value between " + minAge + " and 70.");
+                                            "Please enter a value between " + minAge + " and 70.",
+                                            "Invalid Age", JOptionPane.ERROR_MESSAGE);
                             } catch (NumberFormatException numberFormatException) {
-                                JOptionPane.showMessageDialog(null, "Please enter a valid number.");
+                                JOptionPane.showMessageDialog(null,
+                                        "Please enter a valid number.", "Invalid Input",
+                                        JOptionPane.ERROR_MESSAGE);
                             }
                         }
                     } while (maxAge > 70 || maxAge < minAge || age2.equalsIgnoreCase(""));
@@ -507,13 +475,42 @@ public class MyProgram extends JFrame {
         sortAccordingToAgePerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int district = 0;
-
-
-                citizenArrayList = MyProgramUtility.sortAccordingToAgePerDistrict(list.stream(), district);
-                // Code here
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
+                int district = getDistrict();
+
+                if (district >= 1 && district <= 20) {
+                    setTitle("My Program: Citizens From District " + district + " Sorted According to Age");
+                    citizenArrayList = MyProgramUtility.sortAccordingToAgePerDistrict(list.stream(), district);
+                    // code utilizing JTable here
+                    DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
+                    for (Citizen c : citizenArrayList) {
+                        Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                                c.getAge(), resOrNonRes(c.isResident()),
+                                c.getDistrict(), maleOrFemale(c.getGender())};
+                        tableModel.addRow(data);
+                    }
+
+                    citizenTable = new JTable(tableModel) {
+                        @Override
+                        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                            Component component = super.prepareRenderer(renderer, row, column);
+                            int rendererWidth = component.getPreferredSize().width;
+                            TableColumn tableColumn = getColumnModel().getColumn(column);
+                            tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                    getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                            return component;
+                        }
+                    };
+                    citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                    scrollPane = new JScrollPane(citizenTable);
+                    citizenPane.add(scrollPane);
+                    setMaximumSize(new Dimension(1400, 1000));
+                    setMinimumSize(new Dimension(1100, 550));
+                    pack();
+                    setLocationRelativeTo(null);
+                }
             }
         });
         buttonPaneDistrictSortOperations.add(sortAccordingToAgePerDistrictBtn);
@@ -637,10 +634,6 @@ public class MyProgram extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    protected static JTable yes () {
-        return new JTable();
-    }
-
     protected static String resOrNonRes(boolean r) {
         if (r) return "Resident";
         return "Non-Resident";
@@ -651,8 +644,32 @@ public class MyProgram extends JFrame {
         return "Male";
     }
 
-    protected static int getDistrict() {
-        return 0;
+    protected int getDistrict() {
+        String input;
+        int d = 0;
+        do {
+            input = JOptionPane.showInputDialog(null, "Please enter a district number:",
+                    "Input for District", JOptionPane.INFORMATION_MESSAGE);
+            if (input == null) {
+                this.setTitle("My Program");
+                return 0;
+            } else if (input.equalsIgnoreCase(""))
+                JOptionPane.showMessageDialog(null, "Please provide some data.",
+                        "Blank Text Field", JOptionPane.ERROR_MESSAGE);
+            else {
+                try {
+                    d = Integer.parseInt(input);
+                    if (d < 1 || d > 20)
+                        JOptionPane.showMessageDialog(null,
+                                "Please enter a number between 1 and 20.", "Invalid District Number",
+                                JOptionPane.ERROR_MESSAGE);
+                } catch (NumberFormatException numberFormatException) {
+                    JOptionPane.showMessageDialog(null, "Please enter a whole number.",
+                            "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } while (input.equalsIgnoreCase("") || d < 1 || d > 20);
+        return d;
     }
 
     public static void main(String[] args) {
