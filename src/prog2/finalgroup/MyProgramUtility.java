@@ -110,11 +110,6 @@ public class MyProgramUtility {
             .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    /** 3. TODO Jomari - use maps */
-    protected static ArrayList<Citizen> sortAccordingToGenderPerDistrict(Stream<Citizen> CitizenList, int district) {
-        return CitizenList.collect(Collectors.toCollection(ArrayList::new));
-    }
-
     // SHOW OPERATIONS (GLOBALLY)
     /**
      * 1. By: Enrico Castro 
@@ -213,7 +208,8 @@ public class MyProgramUtility {
     }
 
     /** 5. TODO Jomari - Generate a stream from a Citizen ArrayList then use Stream.filter, then display outputs directly */
-    protected static ArrayList<Citizen> showAgesWithinRangePerDistrict(Stream<Citizen> CitizenList, int district) {
+    protected static ArrayList<Citizen> showAgesWithinRangePerDistrict(Stream<Citizen> CitizenList, int district,
+                                                                       int min, int max) {
         return CitizenList.collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -236,10 +232,10 @@ public class MyProgramUtility {
     }
 
     /**
-     * 2 By: Enrico Castro - Using streams
-     * This method counts the number of males present within an arrayList <br>
-     *   
-     * Method Algorithm:
+     * This method counts the number of males present within an arrayList. <br>
+     * By: Enrico Castro
+     * <p>
+     * Method Algorithm: <br>
      * 1. filter the stream to check the arrayList of citizens who are identified as males
      * 2. count the number of residents who are observed to be males
      * @param CitizenList stream implying the list of citizens

@@ -54,7 +54,7 @@ public class MyProgram extends JFrame {
         popUpWindow = new JFrame("Input Window");
 
         // Global Buttons and associated actions
-        var sortAccordingToAgeGloballyButton = new JButton("Age"); // DONE
+        var sortAccordingToAgeGloballyButton = new JButton("Age");
         sortAccordingToAgeGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -102,7 +102,7 @@ public class MyProgram extends JFrame {
         });
         buttonPaneGlobalSortOperations.add(sortAccordingToAgeGloballyButton);
 
-        var sortAccordingToNameGloballyButton = new JButton("Name"); // DONE
+        var sortAccordingToNameGloballyButton = new JButton("Name");
         sortAccordingToNameGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -114,8 +114,7 @@ public class MyProgram extends JFrame {
                 // code utilizing JTable
                 DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
                 for (Citizen c : citizenArrayList) {
-                    String[] name = c.getFullName().split(" ");
-                    Object[] data = {name[1] + ", " + name[0], c.getEmail(), c.getAddress(),
+                    Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
                             c.getAge(), resOrNonRes(c.isResident()),
                             c.getDistrict(), maleOrFemale(c.getGender())};
                     tableModel.addRow(data);
@@ -144,7 +143,7 @@ public class MyProgram extends JFrame {
         });
         buttonPaneGlobalSortOperations.add(sortAccordingToNameGloballyButton);
 
-        var sortAccordingToDistrictGloballyButton = new JButton("District"); // DONE
+        var sortAccordingToDistrictGloballyButton = new JButton("District");
         sortAccordingToDistrictGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -187,7 +186,7 @@ public class MyProgram extends JFrame {
         buttonPaneGlobalSortOperations.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Sort Operations"));
 
-        var showResidentsGloballyButton = new JButton("Residents"); // DONE
+        var showResidentsGloballyButton = new JButton("Residents");
         showResidentsGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -228,7 +227,7 @@ public class MyProgram extends JFrame {
         });
         buttonPaneGlobalShowOperations.add(showResidentsGloballyButton);
 
-        var showNonResidentsGloballyButton = new JButton("Non-residents"); // DONE
+        var showNonResidentsGloballyButton = new JButton("Non-residents");
         showNonResidentsGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -269,7 +268,7 @@ public class MyProgram extends JFrame {
         });
         buttonPaneGlobalShowOperations.add(showNonResidentsGloballyButton);
 
-        var showMalesGloballyButton = new JButton("Males"); // DONE
+        var showMalesGloballyButton = new JButton("Males");
         showMalesGloballyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -302,8 +301,9 @@ public class MyProgram extends JFrame {
 
                 scrollPane = new JScrollPane(citizenTable);
                 citizenPane.add(scrollPane);
-                setMaximumSize(new Dimension(1400, 1000));
-                setMinimumSize(new Dimension(1100, 550));
+                setResizable(false);
+                /*setMaximumSize(new Dimension(1400, 1000));
+                setMinimumSize(new Dimension(1100, 600));*/
                 pack();
                 setLocationRelativeTo(null);
             }
@@ -466,11 +466,6 @@ public class MyProgram extends JFrame {
         buttonPaneGlobalShowOperations.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Show Operations"));
 
-        // DISTRICT
-        // DISTRICT
-        // DISTRICT
-        // DISTRICT
-
         var sortAccordingToAgePerDistrictBtn = new JButton("Age");
         sortAccordingToAgePerDistrictBtn.addActionListener(new ActionListener() {
             @Override
@@ -519,25 +514,45 @@ public class MyProgram extends JFrame {
         sortAccordingToNamePerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                citizenArrayList = MyProgramUtility.sortAccordingToLastNamePerDistrict(list.stream(), 1);
-                // code here
+                int district = getDistrict();
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
+
+                if (district >= 1 && district <= 20) {
+                    setTitle("My Program: Citizens From District " + district + " Sorted According to Full Name");
+                    citizenArrayList = MyProgramUtility.sortAccordingToLastNamePerDistrict(list.stream(), district);
+                    // code utilizing JTable here
+                    DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
+                    for (Citizen c : citizenArrayList) {
+                        Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                                c.getAge(), resOrNonRes(c.isResident()),
+                                c.getDistrict(), maleOrFemale(c.getGender())};
+                        tableModel.addRow(data);
+                    }
+
+                    citizenTable = new JTable(tableModel) {
+                        @Override
+                        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                            Component component = super.prepareRenderer(renderer, row, column);
+                            int rendererWidth = component.getPreferredSize().width;
+                            TableColumn tableColumn = getColumnModel().getColumn(column);
+                            tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                    getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                            return component;
+                        }
+                    };
+                    citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                    scrollPane = new JScrollPane(citizenTable);
+                    citizenPane.add(scrollPane);
+                    setMaximumSize(new Dimension(1400, 1000));
+                    setMinimumSize(new Dimension(1100, 550));
+                    pack();
+                    setLocationRelativeTo(null);
+                }
             }
         });
         buttonPaneDistrictSortOperations.add(sortAccordingToNamePerDistrictBtn);
-
-        var sortAccordingToGenderPerDistrictBtn = new JButton("Gender");
-        sortAccordingToGenderPerDistrictBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                citizenArrayList = MyProgramUtility.sortAccordingToGenderPerDistrict(list.stream(), 1);
-                // code here
-                if (scrollPane.isVisible())
-                    scrollPane.setVisible(false);
-            }
-        });
-        buttonPaneDistrictSortOperations.add(sortAccordingToGenderPerDistrictBtn);
         buttonPaneDistrictSortOperations.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Sort Operations"));
 
@@ -545,10 +560,43 @@ public class MyProgram extends JFrame {
         showResidentsPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                citizenArrayList = MyProgramUtility.showResidentsPerDistrict(list.stream(), 1);
-                // code here
+                int district = getDistrict();
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
+
+                if (district >= 1 && district <= 20) {
+                    setTitle("My Program: Displaying List Of Resident Citizens From District " + district);
+                    citizenArrayList = MyProgramUtility.showResidentsPerDistrict(list.stream(), district);
+                    // code utilizing JTable here
+                    DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
+                    for (Citizen c : citizenArrayList) {
+                        Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                                c.getAge(), resOrNonRes(c.isResident()),
+                                c.getDistrict(), maleOrFemale(c.getGender())};
+                        tableModel.addRow(data);
+                    }
+
+                    citizenTable = new JTable(tableModel) {
+                        @Override
+                        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                            Component component = super.prepareRenderer(renderer, row, column);
+                            int rendererWidth = component.getPreferredSize().width;
+                            TableColumn tableColumn = getColumnModel().getColumn(column);
+                            tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                    getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                            return component;
+                        }
+                    };
+                    citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                    scrollPane = new JScrollPane(citizenTable);
+                    citizenPane.add(scrollPane);
+                    setMaximumSize(new Dimension(1400, 1000));
+                    setMinimumSize(new Dimension(1100, 550));
+                    pack();
+                    setLocationRelativeTo(null);
+                }
+
             }
         });
         buttonPaneDistrictShowOperations.add(showResidentsPerDistrictBtn);
@@ -557,10 +605,42 @@ public class MyProgram extends JFrame {
         showNonResidentsPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                citizenArrayList = MyProgramUtility.showNonResidentsPerDistrict(list.stream(), 1);
-                // code here
+                int district = getDistrict();
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
+
+                if (district >= 1 && district <= 20) {
+                    setTitle("My Program: Displaying List Of Non-Resident Citizens From District " + district);
+                    citizenArrayList = MyProgramUtility.showNonResidentsPerDistrict(list.stream(), district);
+                    // code utilizing JTable here
+                    DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
+                    for (Citizen c : citizenArrayList) {
+                        Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                                c.getAge(), resOrNonRes(c.isResident()),
+                                c.getDistrict(), maleOrFemale(c.getGender())};
+                        tableModel.addRow(data);
+                    }
+
+                    citizenTable = new JTable(tableModel) {
+                        @Override
+                        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                            Component component = super.prepareRenderer(renderer, row, column);
+                            int rendererWidth = component.getPreferredSize().width;
+                            TableColumn tableColumn = getColumnModel().getColumn(column);
+                            tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                    getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                            return component;
+                        }
+                    };
+                    citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                    scrollPane = new JScrollPane(citizenTable);
+                    citizenPane.add(scrollPane);
+                    setMaximumSize(new Dimension(1400, 1000));
+                    setMinimumSize(new Dimension(1100, 550));
+                    pack();
+                    setLocationRelativeTo(null);
+                }
             }
         });
         buttonPaneDistrictShowOperations.add(showNonResidentsPerDistrictBtn);
@@ -569,10 +649,42 @@ public class MyProgram extends JFrame {
         showMalesPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                citizenArrayList = MyProgramUtility.showMalesPerDistrict(list.stream(), 1);
-                // code here
+                int district = getDistrict();
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
+
+                if (district >= 1 && district <= 20) {
+                    setTitle("My Program: Displaying List Of Male Citizens From District " + district);
+                    citizenArrayList = MyProgramUtility.showMalesPerDistrict(list.stream(), district);
+                    // code utilizing JTable here
+                    DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
+                    for (Citizen c : citizenArrayList) {
+                        Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                                c.getAge(), resOrNonRes(c.isResident()),
+                                c.getDistrict(), maleOrFemale(c.getGender())};
+                        tableModel.addRow(data);
+                    }
+
+                    citizenTable = new JTable(tableModel) {
+                        @Override
+                        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                            Component component = super.prepareRenderer(renderer, row, column);
+                            int rendererWidth = component.getPreferredSize().width;
+                            TableColumn tableColumn = getColumnModel().getColumn(column);
+                            tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                    getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                            return component;
+                        }
+                    };
+                    citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                    scrollPane = new JScrollPane(citizenTable);
+                    citizenPane.add(scrollPane);
+                    setMaximumSize(new Dimension(1400, 1000));
+                    setMinimumSize(new Dimension(1100, 550));
+                    pack();
+                    setLocationRelativeTo(null);
+                }
             }
         });
         buttonPaneDistrictShowOperations.add(showMalesPerDistrictBtn);
@@ -581,10 +693,42 @@ public class MyProgram extends JFrame {
         showFemalesPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                citizenArrayList = MyProgramUtility.showFemalesPerDistrict(list.stream(), 1);
-                // code here
+                int district = getDistrict();
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
+
+                if (district >= 1 && district <= 20) {
+                    setTitle("My Program: Displaying List Of Female Citizens From District " + district);
+                    citizenArrayList = MyProgramUtility.showFemalesPerDistrict(list.stream(), district);
+                    // code utilizing JTable here
+                    DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
+                    for (Citizen c : citizenArrayList) {
+                        Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                                c.getAge(), resOrNonRes(c.isResident()),
+                                c.getDistrict(), maleOrFemale(c.getGender())};
+                        tableModel.addRow(data);
+                    }
+
+                    citizenTable = new JTable(tableModel) {
+                        @Override
+                        public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                            Component component = super.prepareRenderer(renderer, row, column);
+                            int rendererWidth = component.getPreferredSize().width;
+                            TableColumn tableColumn = getColumnModel().getColumn(column);
+                            tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                    getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                            return component;
+                        }
+                    };
+                    citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                    scrollPane = new JScrollPane(citizenTable);
+                    citizenPane.add(scrollPane);
+                    setMaximumSize(new Dimension(1400, 1000));
+                    setMinimumSize(new Dimension(1100, 550));
+                    pack();
+                    setLocationRelativeTo(null);
+                }
             }
         });
         buttonPaneDistrictShowOperations.add(showFemalesPerDistrictBtn);
@@ -593,10 +737,114 @@ public class MyProgram extends JFrame {
         showAgesPerDistrictBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                citizenArrayList = MyProgramUtility.showAgesWithinRangePerDistrict(list.stream(), 1);
-                // code here
+                int district = getDistrict();
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
+
+                if (district >= 1 && district <= 20) {
+                    String age1, age2;
+                    int minAge = 0, maxAge = 0;
+
+                    do {
+                        age1 = JOptionPane.showInputDialog(null, "Please enter the minimum age: ",
+                                "Input Min. Age", JOptionPane.INFORMATION_MESSAGE);
+                        if (age1 == null) {
+                            setTitle("My Program");
+                            break;
+                        }
+
+                        else if (age1.equalsIgnoreCase(""))
+                            JOptionPane.showMessageDialog(null, "Please enter some data.",
+                                    "Blank Text Field", JOptionPane.ERROR_MESSAGE);
+                        else {
+                            try {
+                                minAge = Integer.parseInt(age1);
+                                if (minAge < 18 || minAge > 70)
+                                    JOptionPane.showMessageDialog(null,
+                                            "Please enter a value between 18 and 70.", "Invalid Age",
+                                            JOptionPane.ERROR_MESSAGE);
+                                else if (minAge == 70) {
+                                    JOptionPane.showMessageDialog(null,
+                                            "Maximum age entered. Click OK to proceed.", "Message",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                    maxAge = 70;
+                                    break;
+                                }
+                            } catch (NumberFormatException numberFormatException) {
+                                JOptionPane.showMessageDialog(null, "Please enter a valid number.",
+                                        "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                    } while (minAge < 18 || minAge > 70 || age1.equalsIgnoreCase(""));
+
+                    if (age1 != null && minAge != 70) {
+                        do {
+                            age2 = JOptionPane.showInputDialog(null,
+                                    "Please enter the maximum age: ", "Input Max. Age",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            if (age2 == null) {
+                                minAge = 0;
+                                setTitle("My Program");
+                                break;
+                            }
+                            else if (age2.equalsIgnoreCase(""))
+                                JOptionPane.showMessageDialog(null, "Please provide some data.",
+                                        "Blank Text Field", JOptionPane.ERROR_MESSAGE);
+                            else {
+                                try {
+                                    maxAge = Integer.parseInt(age2);
+                                    if (maxAge < minAge || maxAge > 70)
+                                        JOptionPane.showMessageDialog(null,
+                                                "Please enter a value between " + minAge + " and 70.",
+                                                "Invalid Age", JOptionPane.ERROR_MESSAGE);
+                                } catch (NumberFormatException numberFormatException) {
+                                    JOptionPane.showMessageDialog(null,
+                                            "Please enter a valid number.", "Invalid Input",
+                                            JOptionPane.ERROR_MESSAGE);
+                                }
+                            }
+                        } while (maxAge > 70 || maxAge < minAge || age2.equalsIgnoreCase(""));
+                    }
+
+                    if ((minAge >= 18 && (maxAge >= minAge && maxAge <= 70)) || minAge == 70) {
+                        if (minAge < maxAge)
+                            setTitle("My Program: Showing Citizens Who Are " +
+                                    minAge + "-" + maxAge + " Years Old From District " + district);
+                        else setTitle("My Program: Showing Citizens Who Are " + minAge + " Years Old From District " +
+                                district);
+                        citizenArrayList = MyProgramUtility.showAgesWithinRangePerDistrict(list.stream(), district,
+                                minAge, maxAge);
+
+                        // code utilizing JTable here
+                        DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
+                        for (Citizen c : citizenArrayList) {
+                            Object[] data = {c.getFullName(), c.getEmail(), c.getAddress(),
+                                    c.getAge(), resOrNonRes(c.isResident()),
+                                    c.getDistrict(), maleOrFemale(c.getGender())};
+                            tableModel.addRow(data);
+                        }
+
+                        citizenTable = new JTable(tableModel) {
+                            @Override
+                            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                                Component component = super.prepareRenderer(renderer, row, column);
+                                int rendererWidth = component.getPreferredSize().width;
+                                TableColumn tableColumn = getColumnModel().getColumn(column);
+                                tableColumn.setPreferredWidth(Math.max(rendererWidth +
+                                        getIntercellSpacing().width + 10, tableColumn.getPreferredWidth()));
+                                return component;
+                            }
+                        };
+                        citizenTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                        scrollPane = new JScrollPane(citizenTable);
+                        citizenPane.add(scrollPane);
+                        setMaximumSize(new Dimension(1400, 1000));
+                        setMinimumSize(new Dimension(1100, 550));
+                        pack();
+                        setLocationRelativeTo(null);
+                    }
+                }
             }
         });
         buttonPaneDistrictShowOperations.add(showAgesPerDistrictBtn);
