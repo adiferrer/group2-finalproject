@@ -80,6 +80,16 @@ public class MyProgramUtility {
     }
 
     /** 2. TODO Jerome - use maps */
+    /**
+     * This method sorts a stream according to full name in a specific district
+     *
+     * Method Algorithm:
+     * 1. filter the stream to gather all the values in the specific district
+     * 2. sort the values by its full name using comparator
+     * 3. use collect to store the newly created stream into a new Collection
+     * @param CitizenList stream of citizen list
+     * @param district district inputted by the user
+     */
     protected static ArrayList<Citizen> sortAccordingToLastNamePerDistrict(Stream<Citizen> CitizenList, int district) {
         return CitizenList
             .filter(c -> c.getDistrict() == district)
@@ -111,6 +121,14 @@ public class MyProgramUtility {
     }
 
     /** 4. TODO Jerome - iterate manually through loops */
+     /**
+     * This method creates a collection of all the female citizen
+     *
+     * Method Algorithm
+     * 1. filter to stream to gather all the values of all the female citizen
+     * 2. use collect to store the newly created stream into a new Collection
+     * @param CitizenList stream of citizen list
+     */
     protected static ArrayList<Citizen> showFemalesGlobal(Stream<Citizen> CitizenList) {
         return CitizenList
             .filter(f -> f.getGender() == 'F')
@@ -158,8 +176,20 @@ public class MyProgramUtility {
 
     // COUNT OPERATIONS (GLOBALLY)
     /** 1. TODO Jerome - Use streams; Iterate manually through loops or use a comparator */
-    protected static ArrayList<Citizen> countPeopleWithinRange(Stream<Citizen> CitizenList) {
-        return CitizenList.collect(Collectors.toCollection(ArrayList::new));
+     /**
+     * this method counts the people within a range
+     *
+     * Method Algorithm
+     * 1. filter the stream to gather all the values within the range
+     * 2. count the elements in the stream
+     * @param CitizenList stream of citizen list
+     * @param min minimum range
+     * @param max maximum range
+     */
+    protected static long countPeopleWithinRange(Stream<Citizen> CitizenList) {
+        return CitizenList
+            .filter(c -> c.getDistrict() >= min && c.getDistrict() <= max)
+            .count();
     }
 
     /** 2. TODO Enrico - Use streams */
