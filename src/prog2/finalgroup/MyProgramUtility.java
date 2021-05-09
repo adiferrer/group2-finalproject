@@ -43,7 +43,16 @@ public class MyProgramUtility {
     }
 
     // SORT OPERATIONS (GLOBALLY)
-    /** 1. TODO Enrico  */
+    /**
+     * 3. By: Enrico Castro
+     * This method sorts a stream of citizens according to their age. <br>
+     *   
+     * Method Algorithm:
+     * 1. sort the value of the citizen's ages in a decreasing order from oldest to youngest
+     * 2. collect obtained values of age to a new Collection
+     * @param CitizenList stream implying the list of citizens
+     * @return an arrayList sorted according to the citizen's ages
+     */
     protected static ArrayList<Citizen> sortAccordingToAgeGlobal(Stream<Citizen> CitizenList) {
       return CitizenList
                 .sorted((r1, r2)
@@ -108,7 +117,16 @@ public class MyProgramUtility {
     }
 
     // SHOW OPERATIONS (GLOBALLY)
-    /** 1. TODO Enrico - iterate manually through loops */
+    /**
+     * 1. By: Enrico Castro 
+     * This method amasses the names of the residents present in the arrayList . <br>
+     *   
+     * Method Algorithm:
+     * 1. filter the stream to check all observed residents within the list
+     * 2. collect obtained names of citizens who are listed as residents
+     * @param CitizenList stream implying the list of citizens
+     * @return an arrayList of citizens who are residents
+     *//
     protected static ArrayList<Citizen> showResidentsGlobal(Stream<Citizen> CitizenList) {
         return CitizenList
                 .filter(c -> c.isResident() == true)
@@ -216,7 +234,15 @@ public class MyProgramUtility {
             .count();
     }
 
-    /** 2. TODO Enrico - Use streams */
+    /**
+     * 2 By: Enrico Castro - Using streams
+     * This method counts the number of males present within an arrayList <br>
+     *   
+     * Method Algorithm:
+     * 1. filter the stream to check the arrayList of citizens who are identified as males
+     * 2. count the number of residents who are observed to be males
+     * @param CitizenList stream implying the list of citizens
+     *//
     protected static long countMales(Stream<Citizen> CitizenList) {
        return CitizenList
                 .filter(p -> p.getGender() == 'M')
