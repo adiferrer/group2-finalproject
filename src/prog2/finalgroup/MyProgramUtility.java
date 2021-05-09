@@ -45,7 +45,6 @@ public class MyProgramUtility {
     }
 
     // SORT OPERATIONS (GLOBALLY)
-<<<<<<< HEAD
     /**
      * 3. By: Enrico Castro
      * This method sorts a stream of citizens according to their age. <br>
@@ -56,9 +55,6 @@ public class MyProgramUtility {
      * @param CitizenList stream implying the list of citizens
      * @return an arrayList sorted according to the citizen's ages
      */
-=======
-    /** TODO Enrico: comments  */
->>>>>>> Added Pop-up window method for acquiring district input
     protected static ArrayList<Citizen> sortAccordingToAgeGlobal(Stream<Citizen> CitizenList) {
       return CitizenList
                 .sorted((r1, r2)
@@ -120,7 +116,6 @@ public class MyProgramUtility {
     }
 
     // SHOW OPERATIONS (GLOBALLY)
-<<<<<<< HEAD
     /**
      * 1. By: Enrico Castro 
      * This method amasses the names of the residents present in the arrayList . <br>
@@ -130,10 +125,7 @@ public class MyProgramUtility {
      * 2. collect obtained names of citizens who are listed as residents
      * @param CitizenList stream implying the list of citizens
      * @return an arrayList of citizens who are residents
-     *//
-=======
-    /** TODO Enrico: comments */
->>>>>>> Added Pop-up window method for acquiring district input
+     */
     protected static ArrayList<Citizen> showResidentsGlobal(Stream<Citizen> CitizenList) {
         return CitizenList
                 .filter(c -> c.isResident() == true)
@@ -251,7 +243,7 @@ public class MyProgramUtility {
      * 1. filter the stream to check the arrayList of citizens who are identified as males
      * 2. count the number of residents who are observed to be males
      * @param CitizenList stream implying the list of citizens
-     *//
+     */
     protected static long countMales(Stream<Citizen> CitizenList) {
        return CitizenList
                 .filter(p -> p.getGender() == 'M')
