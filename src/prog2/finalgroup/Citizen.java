@@ -105,7 +105,6 @@ public class Citizen implements Comparable {
                 r, getDistrict(), g);
     }
 
-    @Override
     public int compareTo(Object o) {
         return 0;
     }
