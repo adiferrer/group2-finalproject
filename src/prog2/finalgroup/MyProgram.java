@@ -105,7 +105,7 @@ public class MyProgram extends JFrame {
                 setTitle("My Program: Citizens Sorted According to Name (A-Z)");
                 if (scrollPane.isVisible())
                     scrollPane.setVisible(false);
-                citizenArrayList = MyProgramUtility.sortAccordingToLastNameGlobal(list.stream());
+                citizenArrayList = MyProgramUtility.sortAccordingToNameGlobal(list.stream());
 
                 // code utilizing JTable
                 DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
@@ -516,7 +516,7 @@ public class MyProgram extends JFrame {
 
                 if (district >= 1 && district <= 20) {
                     setTitle("My Program: Citizens From District " + district + " Sorted According to Full Name");
-                    citizenArrayList = MyProgramUtility.sortAccordingToLastNamePerDistrict(list.stream(), district);
+                    citizenArrayList = MyProgramUtility.sortAccordingToNamePerDistrict(list.stream(), district);
                     // code utilizing JTable here
                     DefaultTableModel tableModel = new DefaultTableModel(columnHeader, 0);
                     for (Citizen c : citizenArrayList) {

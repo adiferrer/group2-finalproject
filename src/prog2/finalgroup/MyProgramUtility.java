@@ -14,7 +14,11 @@ public class MyProgramUtility {
     private static BufferedReader br;
 
     /**
-     * TODO Kurt: comments
+     * This method parses a CSV file into an ArrayList. <br>
+     * Done by: Kurt Nudo
+     *
+     * @param fileName the name of the CSV file
+     * @return an ArrayList of Citizens from the CSV file
      */
     protected static ArrayList<Citizen> parseCSV(String fileName) {
         ArrayList<Citizen> citizenArrayList = new ArrayList<>();
@@ -98,8 +102,14 @@ public class MyProgramUtility {
     }
 
     // SORT OPERATIONS (PER DISTRICT)
+
     /**
-     * TODO EJ: comments
+     * The method is assigned to sort the data according to their age within their respective districts.
+     * Done by: EJ Pangwi
+     *
+     * @param citizenList a stream generated from a Citizen ArrayList
+     * @param district    a given district number
+     * @return an ArrayList of Citizens that is sorted according to age in a specified district
      */
     protected static ArrayList<Citizen> sortAccordingToAgePerDistrict(Stream<Citizen> citizenList, int district) {
         return citizenList
@@ -121,7 +131,7 @@ public class MyProgramUtility {
      * @param district    district inputted by the user
      * @return an ArrayList of Citizens that is sorted according to last name in a specified district
      */
-    protected static ArrayList<Citizen> sortAccordingToLastNamePerDistrict(Stream<Citizen> citizenList, int district) {
+    protected static ArrayList<Citizen> sortAccordingToNamePerDistrict(Stream<Citizen> citizenList, int district) {
         return citizenList
                 .filter(c -> c.getDistrict() == district)
                 .sorted(Comparator.comparing(Citizen::getFullName))
@@ -129,6 +139,7 @@ public class MyProgramUtility {
     }
 
     // SHOW OPERATIONS (GLOBALLY)
+
     /**
      * 1. By: Enrico Castro
      * This method amasses the names of the residents present in the arrayList . <br>
@@ -149,11 +160,12 @@ public class MyProgramUtility {
     /**
      * By: Kurt Matthew C. Nudo
      * This method aggregates non-residents of every district.<br>
-     *<br>
+     * <br>
      * Method Algorithm: <br>
      * 1. Use the filter operation on the received citizenList stream, the predicate
-     *    is !isResident.<br>
+     * is !isResident.<br>
      * 2. Collect obtained citizen objects who are non-residents<br>
+     *
      * @param citizenList stream implying the list of citizens
      * @return an arrayList of non-residents
      */
@@ -169,8 +181,9 @@ public class MyProgramUtility {
      * <br>
      * Method Algorithm: <br>
      * 1. Use the filter operation on the received citizenList stream, the predicate
-     *    is c.getGender() == 'M'.<br>
+     * is c.getGender() == 'M'.<br>
      * 2. Collect obtained citizen objects who are males <br>
+     *
      * @param citizenList stream implying the list of citizens
      * @return an ArrayList of males
      */
@@ -214,6 +227,7 @@ public class MyProgramUtility {
     }
 
     // SHOW OPERATIONS (PER DISTRICT)
+
     /**
      * This method filters citizens that belong to a specified district
      * and at the same time, are identified as residents. <br>
@@ -255,8 +269,8 @@ public class MyProgramUtility {
      * and at the same time, are identified as females. <br>
      * Done by: Jeanne Ferrer
      *
-     * @param district    a stream generated from a Citizen ArrayList
-     * @param CitizenList the user indicated district number
+     * @param district    the user indicated district number
+     * @param CitizenList a stream generated from a Citizen ArrayList
      * @return an ArrayList of female Citizens in specified district
      */
     protected static ArrayList<Citizen> showFemalesPerDistrict(Stream<Citizen> CitizenList, int district) {
@@ -267,14 +281,25 @@ public class MyProgramUtility {
     }
 
     /**
-     * 5. TODO Jomari - Generate a stream from a Citizen ArrayList then use Stream.filter, then display outputs directly
+     * This method gets a group of Citizens within the specified age range in a district. <br>
+     * Done by: Jeanne Ferrer
+     * <p>
+     *
+     * @param citizenList a stream generated from a Citizen ArrayList
+     * @param district    the user indicated district number
+     * @param max         the maximum age
+     * @param min         the minimum age
+     * @return an ArrayList of Citizens within an age range in a specified district
      */
-    protected static ArrayList<Citizen> showAgesWithinRangePerDistrict(Stream<Citizen> CitizenList, int district,
+    protected static ArrayList<Citizen> showAgesWithinRangePerDistrict(Stream<Citizen> citizenList, int district,
                                                                        int min, int max) {
-        return CitizenList.collect(Collectors.toCollection(ArrayList::new));
+        return citizenList
+                .filter(c -> c.getDistrict() == district && c.getAge() <= max && c.getAge() >= min)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     // COUNT OPERATIONS (GLOBALLY)
+
     /**
      * This method counts the people within a range. <br>
      * Done by: Jerome Bustarde
@@ -315,7 +340,8 @@ public class MyProgramUtility {
      * <br>
      * Method Algorithm:
      * 1. Invoke countMales() and subtract it with the total amount of elements
-     *    inside the stream parameter.
+     * inside the stream parameter.
+     *
      * @param citizenList
      * @return the number of female citizens
      */
