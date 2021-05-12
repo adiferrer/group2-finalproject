@@ -15,10 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * that generates the GUI (Graphical User Interface).
  */
 public class MyProgram extends JFrame {
-    /**
-     * TODO Kurt & Adi - hard-coded GUI, IJ's tools not to be utilized
-     */
-
     private ArrayList<Citizen> list = MyProgramUtility.parseCSV("res/data.csv");
     private ArrayList<Citizen> citizenArrayList;
 
