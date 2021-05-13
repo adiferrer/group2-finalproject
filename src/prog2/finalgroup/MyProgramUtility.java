@@ -244,10 +244,17 @@ public class MyProgramUtility {
     }
 
     /**
-     * 2. TODO Andre - Generate a stream from a Citizen ArrayList then use Stream.filter, then display outputs directly
+     * This method filters the citizens of a specified district that are also non-residents.
+     * Done by: Andre De Guzman
+     * 
+     * @param citizenList a stream generated from a Citizen ArrayList
+     * @param district    the user indicated district number
+     * @return an ArrayList of non-resident Citizens in specified district
      */
     protected static ArrayList<Citizen> showNonResidentsPerDistrict(Stream<Citizen> citizenList, int district) {
-        return citizenList.collect(Collectors.toCollection(ArrayList::new));
+        return citizenList;
+                .filter(c -> c.getDisctrict() == district && !c.isResident())
+                .collect(Collectors.toCollection(ArrayList::new))
     }
 
     /**
