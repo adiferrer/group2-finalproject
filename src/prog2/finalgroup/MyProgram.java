@@ -44,8 +44,6 @@ public class MyProgram extends JFrame {
         citizenTable = new JTable();
         String[] columnHeader = {"Full Name", "E-mail", "Address", "Age", "Resident", "District", "Gender"};
 
-        popUpWindow = new JFrame("Input Window");
-
         // Global Buttons and associated actions
         var sortAccordingToAgeGloballyButton = new JButton("Age");
         sortAccordingToAgeGloballyButton.addActionListener(new ActionListener() {
