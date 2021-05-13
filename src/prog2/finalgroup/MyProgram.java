@@ -31,9 +31,6 @@ public class MyProgram extends JFrame {
     private JScrollPane scrollPane;
     private JTabbedPane globalOrDistrictSelector;
 
-    private JFrame popUpWindow;
-    private JPanel popUpPanel;
-
     public MyProgram() {
         buttonPaneGlobal = new JPanel();
         buttonPaneGlobalSortOperations = new JPanel();
