@@ -177,7 +177,7 @@ public class MyProgramUtility {
 
     /**
      * By: Kurt Matthew C. Nudo
-     * This method aggregates non-residents of every district.<br>
+     * This method aggregates males of every district.<br>
      * <br>
      * Method Algorithm: <br>
      * 1. Use the filter operation on the received citizenList stream, the predicate
@@ -252,9 +252,9 @@ public class MyProgramUtility {
      * @return an ArrayList of non-resident Citizens in specified district
      */
     protected static ArrayList<Citizen> showNonResidentsPerDistrict(Stream<Citizen> citizenList, int district) {
-        return citizenList;
-                .filter(c -> c.getDisctrict() == district && !c.isResident())
-                .collect(Collectors.toCollection(ArrayList::new))
+        return citizenList
+                .filter(c -> c.getDistrict() == district && !c.isResident())
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
